@@ -5,6 +5,7 @@ The code is this repository can be used to cache the inverse matrix
 Hereunder you can find instructions on how to use the functions
 
 Create our cached matrix object
+
 `> myData <- makeCacheMatrix()`
 
 Store a matrix
