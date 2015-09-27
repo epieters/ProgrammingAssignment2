@@ -4,21 +4,38 @@
 
 ## This function creates a special matrix object that can caches its inverse
 ## it contains the following functions:
-## 1. set the value of a matrix
-## 2. get the value of a matrix
-## 3. set the value of the inverse of a matrix
-## 4. get the value of the inverse of a matrix
+## 1. setMatrix     set the value of a matrix
+## 2. getMatrix     get the value of a matrix
+## 3. setInverse    set the value of the inverse of a matrix
+## 4. getInverse    get the value of the inverse of a matrix
 
 makeCacheMatrix <- function(x = matrix()) {
+    
+    # initialize the cache
     m <- NULL
-    set <- function(y) {
+    
+    # store a matrix
+    setMatrix <- function(y) {
         x <<- y
         inv <<- NULL
     }
-    get <- function() x
-    setinverse <- function(inverse) m <<- inverse
-    getinverse <- function() m
-    list(set=set, get=get, setinverse=setinverse, getinverse=getinverse)
+    
+    # return a stored matrix
+    getMatrix <- function() {
+        x
+    }
+    
+    # cache the inversed matrix
+    setInverse <- function(solve) {
+        m <<- solve
+    }
+    
+    # get the inversed matrix
+    getInverse <- function() {
+        m
+    }
+    
+    list(setMatrix=setMatrix, getMatrix=getMatrix, setInverse=setInverse, getInverse=getInverse)
 }
 
 ## Following function calculates he inverse of the matrix created by makeCacheMatrix
@@ -29,13 +46,22 @@ makeCacheMatrix <- function(x = matrix()) {
 ## using the setinverse function
 
 cacheSolve <- function(x, ...) {
-    m <- x$getinverse()
-    if(!is.null(m)) {
+    
+    # get the cached inverse matrix
+    im <- x$getInverse()
+    
+    # when there is a cached inverse matrix, return it
+    if(!is.null(im)) {
         message("getting cached data.")
-        return(m)
+        return(im)
     }
-    data <- x$get()
-    m <- solve(data)
-    x$setinverse(m)
-    m
+    
+    # otherwise calculate it
+    m <- x$getMatrix()
+    im <- solve(m)
+    # store the inverted matrix in the cache
+    x$setInverse(im)
+    
+    #return the inverse matrix
+    im
 }
